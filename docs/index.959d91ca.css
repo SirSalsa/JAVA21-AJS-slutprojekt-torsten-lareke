@@ -1,0 +1,2 @@
+#core{justify-content:center;display:flex}#start,#shop,#cart{flex-flow:column;justify-content:center;align-items:center;display:flex}#shop>main{flex-flow:wrap;justify-content:center;display:flex}#cart>main{flex-flow:column;display:flex}article{border:3px solid #000;margin:50px;padding:15px}#checkout{height:2.5rem;width:75%;align-self:center}
+/*# sourceMappingURL=index.959d91ca.css.map */
