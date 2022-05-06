@@ -1,49 +1,26 @@
 import { useState } from "react";
+import Discount from "./Discount";
+import NoDiscount from "./NoDiscount";
 
 export default function Product({updateProducts, title, price, imgUrl}){
 
     //Randomizes to possibly make item on sale
-    let saleWeight = Math.random();
-    let discountWeight = Math.random();
-    let discountPercent;
-    let discountPrice = 0;
-    let percentText;
-    if (saleWeight > 0.1){
-        if (discountWeight > 0.3 && discountWeight < 0.5){
-            discountPercent = 0.90;
-            percentText = "10%";
-        }
-        else if (discountWeight > 0.5 && discountWeight < 0.7){
-            discountPercent = 0.80;
-            percentText = "20%";
-        }
-        else if (discountWeight > 0.7){
-            discountPercent = 0.70;
-            percentText = "30%";
-        }
-        discountPrice = (price * discountPercent);
-    }
+    const [saleWeight, setSaleWeight] = useState(Math.random());
+    const [discountWeight, setDiscountWeight] = useState(Math.random());
+    // const [newPrice, setNewPrice] = useState(price);
 
-    let priceText = price + "$";
-    let salePriceText = "";
-    let newPrice = price;
-
-    let priceStyle = "none";
-    let saleStyle = "red";
-
-    if (discountPrice > 0){//Only shows if there is a sale on item
-        priceStyle = "line-through";
-        newPrice = Number.parseFloat(discountPrice).toFixed(2);
-        salePriceText = newPrice + "$" + "  " + percentText + " OFF!";
-    }
 
     const [newObj, setNewObj] = useState({
         name: title,
-        price: newPrice,
+        price: price,
         amount: 0
     });
 
-    //Detect changes typed in input box (for name)
+    function updatePrice(newPrice){
+        setNewObj({...newObj, price: newPrice})
+    }
+
+    //Detect changes typed in input box (for amount)
     function handleChange({target}){
         setNewObj({...newObj,
             [target.name]: target.value
@@ -63,8 +40,9 @@ export default function Product({updateProducts, title, price, imgUrl}){
         <article>
             <img src={imgUrl} width="250px"></img>
             <h3>{title}</h3>
-            <h4 style={{textDecoration: priceStyle}}>{priceText}</h4>
-            <p style={{color: saleStyle}}> {salePriceText}</p>
+            
+            {saleWeight <= 0.4 && <NoDiscount price={price}/>}
+            {saleWeight > 0.4 && <Discount discountWeight={discountWeight} price={price} setNewPrice={updatePrice}/>}
             
             <input onChange={handleChange} name="amount" type="number" placeholder="Amount"></input>
             <button onClick={handleSubmit}>Add to Cart</button>
